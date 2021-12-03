@@ -119,3 +119,12 @@ export async function buildNFTTransaction(
 
   return { code, issuer: issuerKey.publicKey(), xdr };
 }
+
+export async function storeIpfsBuildTx(
+  accountPublicKey: string,
+  nftPayload: NFTPayload
+) {
+  let metadata = await storeNFT(nftPayload);
+
+  return await buildNFTTransaction(accountPublicKey, metadata);
+}
