@@ -1,6 +1,6 @@
 {
   "name": "sep-40-off-chain-storage-ipfs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This package explores how to link Stellar will storage of large data on IPFS",
   "main": "src/index.ts",
   "scripts": {
