@@ -1,0 +1,18 @@
+{
+  "include": [
+    "./src/*"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "esnext"
+    ],
+    "target": "ESNext",
+    "module": "CommonJS",
+    "skipLibCheck": false,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "noEmit": true,
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "sep-40-off-chain-storage-ipfs",
+  "version": "1.0.0",
+  "description": "This package explores how to link Stellar will storage of large data on IPFS",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "nodemon --exec ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@types/node": "12.12.11",
+    "@types/stellar-sdk": "0.15.1",
+    "ipfs-core": "0.12.2",
+    "nft.storage": "5.0.0",
+    "stellar-sdk": "9.1.0",
+    "ts-node": "8.5.2",
+    "typescript": "3.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.0"
+  },
+  "keywords": []
+}
