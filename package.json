@@ -1,6 +1,6 @@
 {
-  "name": "stellar-nft-storage",
-  "version": "1.0.2",
+  "name": "stellar-nft.storage",
+  "version": "1.0.3",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
@@ -9,7 +9,6 @@
   "dependencies": {
     "@types/node": "12.12.11",
     "@types/stellar-sdk": "0.15.1",
-    "ipfs-core": "0.12.2",
     "nft.storage": "5.0.0",
     "stellar-sdk": "9.1.0",
     "ts-node": "8.5.2",
