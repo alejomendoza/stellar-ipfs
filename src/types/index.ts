@@ -5,12 +5,12 @@ export type NFTPayload = {
   issuer: string;
   domain: string;
   image: {
-    fileName: "string";
+    fileName: string;
     data: Buffer;
-    type: "video/jpg";
+    type: "image/jpeg" | "image/png";
   };
   video: {
-    fileName: "string";
+    fileName: string;
     data: Buffer;
     type: "video/mp4";
   };
