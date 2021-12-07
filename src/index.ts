@@ -128,5 +128,6 @@ export async function storeIpfsBuildTx(
   nftPayload.issuer = issuerKey.publicKey();
   let metadata = await storeNFT(nftPayload);
 
-  return await buildNFTTransaction(accountPublicKey, issuerKey, metadata);
+  const res = await buildNFTTransaction(accountPublicKey, issuerKey, metadata);
+  return { ...metadata, ...res };
 }
