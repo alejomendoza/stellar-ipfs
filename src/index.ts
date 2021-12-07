@@ -96,7 +96,7 @@ export async function buildNFTTransaction(
   transaction.addOperation(
     StellarSdk.Operation.payment({
       source: issuerPublicKey,
-      destination: issuerPublicKey,
+      destination: accountPublicKey,
       asset: asset,
       amount: supply
     })
