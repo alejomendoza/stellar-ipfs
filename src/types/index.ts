@@ -2,7 +2,7 @@ export type NFTPayload = {
   name: string;
   description: string;
   code: string;
-  issuer: string;
+  issuer?: string;
   domain: string;
   image: {
     fileName: string;

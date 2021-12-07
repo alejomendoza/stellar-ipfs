@@ -1,4 +1,4 @@
-import StellarSdk from "stellar-sdk";
+import StellarSdk, { Keypair } from "stellar-sdk";
 import { NFTStorage, File } from "nft.storage";
 import { NFTMetadata, NFTPayload } from "./types/index";
 import { getConfig } from "./utils";
@@ -39,12 +39,12 @@ export async function storeNFT(payload: NFTPayload) {
 
 export async function buildNFTTransaction(
   accountPublicKey: string,
+  issuerKey: Keypair,
   nftMetadata: NFTMetadata
 ) {
   const { code, supply, ipnft } = nftMetadata;
-  const issuerKey = StellarSdk.Keypair.random();
   const issuerPublicKey = issuerKey.publicKey();
-  const asset = new StellarSdk.Asset(code, issuerKey.publicKey);
+  const asset = new StellarSdk.Asset(code, issuerPublicKey);
 
   const account = await (async () => {
     try {
@@ -95,7 +95,7 @@ export async function buildNFTTransaction(
   );
   transaction.addOperation(
     StellarSdk.Operation.payment({
-      source: issuerKey.publicKey(),
+      source: issuerPublicKey,
       destination: issuerPublicKey,
       asset: asset,
       amount: supply
@@ -103,7 +103,7 @@ export async function buildNFTTransaction(
   );
   transaction.addOperation(
     StellarSdk.Operation.setOptions({
-      source: issuerKey.publicKey(),
+      source: issuerPublicKey,
       setFlags: StellarSdk.AuthImmutableFlag,
       masterWeight: 0,
       lowThreshold: 0,
@@ -117,14 +117,16 @@ export async function buildNFTTransaction(
   const xdr = transactionBuilt.toEnvelope().toXDR("base64");
   console.log(`Transaction built: ${xdr}`);
 
-  return { code, issuer: issuerKey.publicKey(), xdr };
+  return { code, issuer: issuerPublicKey, xdr };
 }
 
 export async function storeIpfsBuildTx(
   accountPublicKey: string,
   nftPayload: NFTPayload
 ) {
+  let issuerKey = StellarSdk.Keypair.random();
+  nftPayload.issuer = issuerKey.publicKey();
   let metadata = await storeNFT(nftPayload);
 
-  return await buildNFTTransaction(accountPublicKey, metadata);
+  return await buildNFTTransaction(accountPublicKey, issuerKey, metadata);
 }
