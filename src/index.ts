@@ -1,4 +1,12 @@
-import StellarSdk, { Keypair } from "stellar-sdk";
+import {
+  Keypair,
+  Asset,
+  TransactionBuilder,
+  Memo,
+  Operation,
+  AuthImmutableFlag,
+  BASE_FEE
+} from "stellar-base";
 import { NFTStorage, File } from "nft.storage";
 import { NFTMetadata, NFTPayload } from "./types/index";
 import { getConfig } from "./utils";
@@ -44,7 +52,7 @@ export async function buildNFTTransaction(
 ) {
   const { code, supply, ipnft } = nftMetadata;
   const issuerPublicKey = issuerKey.publicKey();
-  const asset = new StellarSdk.Asset(code, issuerPublicKey);
+  const asset = new Asset(code, issuerPublicKey);
 
   const account = await (async () => {
     try {
@@ -57,28 +65,30 @@ export async function buildNFTTransaction(
       );
     }
   })();
-  const fee = await getConfig().horizonServer.fetchBaseFee();
 
-  const transaction = new StellarSdk.TransactionBuilder(account, {
-    fee,
-    networkPassphrase: getConfig().networkPassphrase
-  });
+  const transaction = new TransactionBuilder(
+    new Account(account.id, account.sequence),
+    {
+      BASE_FEE,
+      networkPassphrase: getConfig().networkPassphrase
+    }
+  );
   transaction.setTimeout(300);
-  transaction.addMemo(StellarSdk.Memo.text(`Create ${code} NFT ✨`));
+  transaction.addMemo(Memo.text(`Create ${code} NFT ✨`));
   transaction.addOperation(
-    StellarSdk.Operation.beginSponsoringFutureReserves({
+    Operation.beginSponsoringFutureReserves({
       sponsoredId: issuerPublicKey
     })
   );
   transaction.addOperation(
-    StellarSdk.Operation.createAccount({
+    Operation.createAccount({
       destination: issuerPublicKey,
       startingBalance: "0"
     })
   );
 
   transaction.addOperation(
-    StellarSdk.Operation.manageData({
+    Operation.manageData({
       source: issuerPublicKey,
       name: `ipfshash`,
       value: ipnft
@@ -86,25 +96,25 @@ export async function buildNFTTransaction(
   );
 
   transaction.addOperation(
-    StellarSdk.Operation.endSponsoringFutureReserves({
+    Operation.endSponsoringFutureReserves({
       source: issuerPublicKey
     })
   );
   transaction.addOperation(
-    StellarSdk.Operation.changeTrust({ asset: asset, limit: supply })
+    Operation.changeTrust({ asset: asset, limit: supply.toString() })
   );
   transaction.addOperation(
-    StellarSdk.Operation.payment({
+    Operation.payment({
       source: issuerPublicKey,
       destination: accountPublicKey,
       asset: asset,
-      amount: supply
+      amount: supply.toString()
     })
   );
   transaction.addOperation(
-    StellarSdk.Operation.setOptions({
+    Operation.setOptions({
       source: issuerPublicKey,
-      setFlags: StellarSdk.AuthImmutableFlag,
+      setFlags: AuthImmutableFlag,
       masterWeight: 0,
       lowThreshold: 0,
       medThreshold: 0,
@@ -124,7 +134,7 @@ export async function storeIpfsBuildTx(
   accountPublicKey: string,
   nftPayload: NFTPayload
 ) {
-  let issuerKey = StellarSdk.Keypair.random();
+  let issuerKey = Keypair.random();
   nftPayload.issuer = issuerKey.publicKey();
   let metadata = await storeNFT(nftPayload);
 

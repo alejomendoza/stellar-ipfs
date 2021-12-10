@@ -1,14 +1,13 @@
-import StellarSdk from "stellar-sdk";
+import { Networks } from "stellar-base";
+import axios from "axios";
 
-export function getConfig(network = "testnet") {
-  switch (network) {
+export function getConfig() {
+  switch (process.env.STELLAR_NETWORK) {
     case "testnet":
       return {
         network: network,
-        networkPassphrase: StellarSdk.Networks.TESTNET,
-        horizonServer: new StellarSdk.Server(
-          "https://horizon-testnet.stellar.org"
-        ),
+        networkPassphrase: Networks["TESTNET"],
+        horizonUrl: "https://horizon-testnet.stellar.org",
         ipfsUrl: (cid) => `https://ipfs.io/ipfs/${cid}`,
         explorerAssetUrl: (code, issuer) =>
           `https://stellar.expert/explorer/testnet/asset/${code}-${issuer}`,
@@ -17,11 +16,11 @@ export function getConfig(network = "testnet") {
         dexAssetUrl: (code, issuer) =>
           `https://stellarterm.com/exchange/${code}-${issuer}/XLM-native/testnet`
       };
-    case "pubnet":
+    default:
       return {
         network: network,
-        networkPassphrase: StellarSdk.Networks.PUBNET,
-        horizonServer: new StellarSdk.Server("https://horizon.stellar.org"),
+        networkPassphrase: Networks["PUBLIC"],
+        horizonUrl: "https://horizon.stellar.org",
         ipfsUrl: (cid) => `https://ipfs.io/ipfs/${cid}`,
         explorerAssetUrl: (code, issuer) =>
           `https://stellar.expert/explorer/public/asset/${code}-${issuer}`,
@@ -31,4 +30,11 @@ export function getConfig(network = "testnet") {
           `https://stellarterm.com/exchange/${code}-${issuer}/XLM-native`
       };
   }
+}
+
+export async function getAccount(publicKey) {
+  let account = await axios
+    .get(`${getConfig().horizonUrl}/accounts/${publicKey}`)
+    .then(({ data }) => data);
+  return account;
 }
