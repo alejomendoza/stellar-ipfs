@@ -9,7 +9,7 @@ import {
 } from "stellar-base";
 import { NFTStorage, File } from "nft.storage";
 import { NFTMetadata, NFTPayload } from "./types/index";
-import { getConfig } from "./utils";
+import { getConfig, getAccount } from "./utils";
 
 const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
 
@@ -56,7 +56,7 @@ export async function buildNFTTransaction(
 
   const account = await (async () => {
     try {
-      return await getConfig().horizonServer.loadAccount(accountPublicKey);
+      return await getAccount(accountPublicKey);
     } catch {
       throw new Error(
         `Your account ${issuerPublicKey} does not exist on the Stellar ${
