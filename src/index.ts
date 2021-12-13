@@ -5,6 +5,7 @@ import {
   Memo,
   Operation,
   AuthImmutableFlag,
+  Account,
   BASE_FEE
 } from "stellar-base";
 import { NFTStorage, File } from "nft.storage";
@@ -69,7 +70,7 @@ export async function buildNFTTransaction(
   const transaction = new TransactionBuilder(
     new Account(account.id, account.sequence),
     {
-      BASE_FEE,
+      fee: BASE_FEE,
       networkPassphrase: getConfig().networkPassphrase
     }
   );
@@ -127,7 +128,7 @@ export async function buildNFTTransaction(
   const xdr = transactionBuilt.toEnvelope().toXDR("base64");
   console.log(`Transaction built: ${xdr}`);
 
-  return { code, issuer: issuerPublicKey, xdr };
+  return { code, issuer: issuerPublicKey, issuerKey, transaction, xdr };
 }
 
 export async function storeIpfsBuildTx(
