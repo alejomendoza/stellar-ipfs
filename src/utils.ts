@@ -5,7 +5,7 @@ export function getConfig() {
   switch (process.env.STELLAR_NETWORK) {
     case "testnet":
       return {
-        network: network,
+        network: "testnet",
         networkPassphrase: Networks["TESTNET"],
         horizonUrl: "https://horizon-testnet.stellar.org",
         ipfsUrl: (cid) => `https://ipfs.io/ipfs/${cid}`,
@@ -18,7 +18,7 @@ export function getConfig() {
       };
     default:
       return {
-        network: network,
+        network: "pubnet",
         networkPassphrase: Networks["PUBLIC"],
         horizonUrl: "https://horizon.stellar.org",
         ipfsUrl: (cid) => `https://ipfs.io/ipfs/${cid}`,
