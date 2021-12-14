@@ -40,9 +40,9 @@ export async function storeNFT(payload: NFTPayload) {
     issuer: data.issuer,
     domain: data.domain,
     supply: data.supply,
-    image: data.image as string,
-    video: data.properties.video as string,
-    ipnft: ipnft as string
+    image: (data.image as unknown) as string,
+    video: (data.properties.video as unknown) as string,
+    ipnft: (ipnft as unknown) as string
   } as NFTMetadata;
 }
 
