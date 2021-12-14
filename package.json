@@ -1,6 +1,6 @@
 {
   "name": "stellar-nft.storage",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
@@ -11,7 +11,7 @@
     "@types/stellar-base": "0.13.4",
     "axios": "0.24.0",
     "nft.storage": "5.0.0",
-    "stellar-base": "6.0.6",
+    "stellar-base": "stellar/js-stellar-base#upgrade-nacl",
     "ts-node": "8.5.2",
     "typescript": "3.7.2"
   },
