@@ -1,7 +1,8 @@
 {
   "name": "stellar-nft.storage",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "",
+  "type": "module",
   "main": "src/index.ts",
   "scripts": {
     "start": "nodemon --exec ts-node src/index.ts"
